@@ -32,37 +32,35 @@
     <section>
         <div class="d-flex justify-content-between container pt-5">
             <h3 class="myHeading"> المستخدمين</h3>
-            <button class="btn btn-primary">
+            <a class="btn btn-primary" href="{{ route('user.create') }}">
                 جديد +
-            </button>
+            </a>
         </div>
         <hr>
         <div class="container">
             <form action="{{ route('user.index') }}" method="get">
-                <div class="d-flex justify-content-around mt-5">
-                    <div class="form-check">
-                        <input class="form-check-input " type="radio" name ='active' value="1" id="active" @if (request()->input('active')===null|| request()->input('active')==='1') checked @endif>
-                        <label class="form-check-label" for="active">
-                            نشط
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name ='active' value="0" id="unActive" @if ( request()->input('active')==='0') checked @endif>
-                        <label class="form-check-label " for="unActive">
-                            غير نشط
-                        </label>
-                       
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name ='active' value="2" id="all"@if ( request()->input('active')==='2') checked @endif>
-                        <label class="form-check-label" for="all">
-                            الكل
-                        </label>
-                    </div>
-                </div>
-
                 <div class="form-control mt-5" >
-
+                    <div class="d-flex justify-content-around mt-5">
+                        <div class="form-check">
+                            <input class="form-check-input " type="radio" name ='active' value="1" id="active" @if (request()->input('active')===null|| request()->input('active')==='1') checked @endif>
+                            <label class="form-check-label" for="active">
+                                نشط
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name ='active' value="0" id="unActive" @if ( request()->input('active')==='0') checked @endif>
+                            <label class="form-check-label " for="unActive">
+                                غير نشط
+                            </label>
+                           
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name ='active' value="2" id="all"@if ( request()->input('active')==='2') checked @endif>
+                            <label class="form-check-label" for="all">
+                                الكل
+                            </label>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class=" mt-5 cal-12">
                             <select name="rule_id" id="rule_id" class="form-control select2">
@@ -88,7 +86,7 @@
                       </div>
 
                         <button class="btn btn-primary mt-5" type='submit'>
-                            فرز
+                            فــــرز
                         </button>
                 </div>
             </form>
@@ -161,11 +159,19 @@
                         </div>
                         {{-- end unactive modal --}}
                     @endforeach
-                    <tr>
-
-                            {!! $users->links() !!}
-                    </tr>
-
+                    @if(!$users)
+                        <tr>
+                            <td class="text-center" colspan="6">
+                                لا توجد بيانات
+                            </td>
+                        </tr>
+                        @elseif ($users->lastPage() > 1)
+                        <tr>
+                            <td class="text-center" colspan="6">
+                                @include('includes.pagination')
+                            </td>
+                        </tr>
+                        @endif
 
                     <!-- Add more rows and data as needed -->
                 </tbody>

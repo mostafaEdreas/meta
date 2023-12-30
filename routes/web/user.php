@@ -9,4 +9,6 @@ Route::group(['controller'=> UserController::class,'middleware'=>'IsAdmin','pref
     Route::get('/show','show')->name('user.show');
     Route::post('/distroy/{id}', 'distroy')->name('user.distroy');
     Route::post('/restore/{id}','restore')->name('user.restore');
+    Route::get('/create','create')->name('user.create');
+    Route::get('/store','store')->name('user.store');
 });
