@@ -15,7 +15,8 @@ use Illuminate\Support\Facades\DB;
             if(array_key_exists('active', $request)){
                 $users = $this->getUsersByStatus($users,$request['active']) ;
             }
-            $users = $this->userFilterByNameAndAddress($users,$request) ;
+            $users = $this->usersFilter($users,$request) ;
+            // dd(request()->all());
         }
         return  $users;
     }
@@ -70,13 +71,26 @@ use Illuminate\Support\Facades\DB;
             }]);
     }
 
-    private function userFilterByNameAndAddress($users ,$request){
-         $users
-        ->where('users.name','like','%'.$request['name'].'%')
-        ->orWhere('address','%'.$request['address'].'%')
-        ->orWhere('phone','%'.$request['phone'].'%')
-        ->orWhere('rule_id','%'.$request['rule_id'].'%')
-        ->orWhere('email','%'.$request['email'].'%');
+    private function usersFilter($users ,$request){
+         if (request()->filled('name')) {
+            $users->where('name', 'like', '%' . request()->input('name') . '%');
+        }
+        
+        if (request()->filled('address')) {
+            $users->where('address', 'like', '%' . request()->input('address') . '%');
+        }
+        
+        if (request()->filled('phone')) {
+            $users->where('phone', 'like', '%' . request()->input('phone') . '%');
+        }
+        
+        if (request()->filled('rule_id')) {
+            $users->where('rule_id', request()->input('rule_id'));
+        }
+        
+        if (request()->filled('email')) {
+            $users->where('email', 'like', '%' . request()->input('email') . '%');
+        }
         return $users;
     }
     public function saveIamge($ImageName){

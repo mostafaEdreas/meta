@@ -63,7 +63,7 @@
                             </li>
                         </ul>
                     </li>
-                    <a class="nav-link active" aria-current="page" href="#" >المستخدمين</a>
+                    <a class="nav-link active" aria-current="page" href="{{ route('user.index') }}" >المستخدمين</a>
                     <a class="nav-link" href="#">المبيعات</a>
                     <a class="nav-link" href="#">المشتريات</a>
                     <a class="nav-link " href="#"></a>

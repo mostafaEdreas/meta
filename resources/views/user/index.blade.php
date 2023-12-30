@@ -41,19 +41,20 @@
             <form action="{{ route('user.index') }}" method="get">
                 <div class="d-flex justify-content-around mt-5">
                     <div class="form-check">
-                        <input class="form-check-input " type="radio" name ='active' value="1" id="active" @if (!old('active')|| old('active')==1) checked @endif>
+                        <input class="form-check-input " type="radio" name ='active' value="1" id="active" @if (request()->input('active')===null|| request()->input('active')==='1') checked @endif>
                         <label class="form-check-label" for="active">
                             نشط
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name ='active' value="0" id="unActive">
+                        <input class="form-check-input" type="radio" name ='active' value="0" id="unActive" @if ( request()->input('active')==='0') checked @endif>
                         <label class="form-check-label " for="unActive">
                             غير نشط
                         </label>
+                       
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name ='active' value="2" id="all">
+                        <input class="form-check-input" type="radio" name ='active' value="2" id="all"@if ( request()->input('active')==='2') checked @endif>
                         <label class="form-check-label" for="all">
                             الكل
                         </label>
@@ -65,23 +66,24 @@
                     <div class="row">
                         <div class=" mt-5 cal-12">
                             <select name="rule_id" id="rule_id" class="form-control select2">
-                                <option class="myHeading form-select" aria-label="Default select example">اختر نوع المستخدم</option>
+                                <option class="myHeading form-select" @readonly(true) value="" aria-label="Default select example">اختر نوع المستخدم</option>
                                 @foreach ($rules as $rule)
-                                    <option class="myHeading" value="{{ $rule->id }}">{{ $rule->name }}</option>
+                                    <option class="myHeading" value="{{ $rule->id }}" {{ request()->input('rule_id') == $rule->id ? 'selected' : '' }}>{{ $rule->name }}</option>
                                 @endforeach
                             </select>
+                             {{-- @dd(request()->input('rule_id')) --}}
                         </div>
                         <div class="col-4 mt-5">
-                          <input type="text" name="name" class="form-control" placeholder="الاسم" aria-label="First name">
+                          <input type="text" name="name" class="form-control" value="{{request()->input('name')}}" placeholder="الاسم" aria-label="First name">
                         </div>
                         <div class="col-4 mt-5">
-                          <input type="text" name="phone" class="form-control" placeholder="الهاتف" aria-label="Last name">
+                          <input type="text" name="phone" class="form-control" placeholder="الهاتف" value="{{request()->input('phone')}}" aria-label="Last name">
                         </div>
                         <div class="col-4 mt-5">
-                            <input type="text" name="email" class="form-control" placeholder="الايميل" aria-label="Last name">
+                            <input type="text" name="email" class="form-control" placeholder="الايميل" value="{{request()->input('email')}}" aria-label="Last name">
                         </div>
                         <div class="col-4 mt-5">
-                            <input type="text" name="address" class="form-control" placeholder="العنوان" aria-label="Last name">
+                            <input type="text" name="address" class="form-control" placeholder="العنوان" value="{{request()->input('address')}}" aria-label="Last name">
                         </div>
                       </div>
 
@@ -108,7 +110,7 @@
                         <tr>
                             <td>{{ $i + 1 }}</td>
                             <td>{{ $user->name }}</td>
-                            <td>{{ $user->ruleName }}</td>
+                            <td>{{ $user->rule->name }}</td>
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->phone }}</td>
                             <td>
@@ -159,11 +161,20 @@
                         </div>
                         {{-- end unactive modal --}}
                     @endforeach
+                    <tr>
+
+                            {!! $users->links() !!}
+                    </tr>
+
+
                     <!-- Add more rows and data as needed -->
                 </tbody>
             </table>
         </div>
     </section>
+    <div class="text-center container">
+       
+    </div>
 @endsection
 @section('script')
 <script>

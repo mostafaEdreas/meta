@@ -15,8 +15,9 @@ class UserController extends Controller
         $this->userService = $userService;
     }
     public function index(){
+       
         (object)$data['rules'] = Rule::all();
-        (object)$data['users'] = $this->userService->getUsers()->select('users.*', 'rules.name as ruleName') ->join('rules', 'users.rule_id', '=', 'rules.id')->get();
+        $data['users'] = $this->userService->getUsers()->with('rule')->paginate(1)->appends(request()->query());
         return view("user.index",$data);
     }
     public function show(){}
