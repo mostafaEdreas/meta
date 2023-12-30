@@ -9,4 +9,11 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
+
+    protected function getCurentUser(){
+        return auth()->user();
+    }
+    protected function getCurentUserRule(){
+        return auth()->user()->rule->name;
+    }
 }

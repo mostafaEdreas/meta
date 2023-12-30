@@ -13,15 +13,9 @@ return new class extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->nullable();
-            $table->string('phone')->nullable();
-            $table->string('img')->nullable();
-            $table->string('addres')->nullable();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password')->nullable();
-            $table->rememberToken();
-            $table->foreignId('user_id')->constrained();
+            $table->string('name')->unique();
+            $table->string('phone')->nullable()->unique();
+            $table->string('address')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

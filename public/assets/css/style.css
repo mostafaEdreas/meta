@@ -1,0 +1,95 @@
+:root {
+    --primary-color: #0085a4;
+    --drop-dow-color:#75dbe7;
+    --text-color-white: #ffffff;
+  }
+  
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    font-family: 'Amiri', serif;
+}
+section{
+    padding: 5rem;
+    margin: 1rem;
+    box-shadow: 0 0 5 rgba(0, 0, 0, 0.527);
+    background-color: var(--text-color-white);
+    border-radius: 20px;
+    height: inherit;
+}
+.dx-datagrid .dx-datagrid-headers .dx-datagrid-header {
+    background-color: #6666; /* Set your desired background color */
+}
+.myHeading {
+    color: gray; /* Change text color to gray */
+    pointer-events: none; /* Prevent pointer events */
+}
+
+nav *{
+    color: var( --text-color-white) !important;
+}
+nav {
+    background-color: var(--primary-color) !important;
+}
+.dropdown li a{
+    color: var(--primary-color) !important;
+}
+.dropdown ul{
+    background-color:var( --drop-dow-color) !important;
+}
+img{
+    width: 100%;
+    display: inline-block;
+}
+.relative{
+    position: relative;
+}
+.coverUserImgSmall{
+    width:4rem ;
+    border-radius: 50%;
+}
+.arrow-hidden::after {
+    display: none !important;
+}
+.absoluteArrwo{
+    position: absolute;
+    top: 40%;
+    left: 0;
+}
+.home{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 3rem;
+    
+}
+.homeCarts{
+    width:20rem;
+    color: black;
+    background-color: var(--drop-dow-color);
+    border-radius: 5%;
+}
+
+.btnCycl{
+    border-radius: 50%;
+}
+
+.btnPrimary{
+    text-decoration: none;
+    background-color: var(--primary-color);
+    color: white;
+    display: inline-block;
+    padding: 1rem;
+    transition: all .8s li;
+}
+.btnHover:hover{
+    background-color: #ffffff;
+    color: black;
+}

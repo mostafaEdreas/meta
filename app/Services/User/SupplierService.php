@@ -1,11 +1,7 @@
 <?php
 
-namespace Services\User;
+namespace App\Services\User;
 
  class SupplierService{
     
-    public function store(){
-        $data = request()->all();
-        
-    }
  }

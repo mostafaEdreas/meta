@@ -13,15 +13,14 @@ return new class extends Migration
     {
         Schema::create('purchases', function (Blueprint $table) {
             $table->id();
-            $table->string('ref')->unique();
+            $table->string('reference')->unique();
             $table->foreignId('supplier_id')->constrained();
             $table->foreignId('user_id')->constrained();
-            $table->string('total_amount')->nullable();
-            $table->string('product_count')->nullable();
+            $table->foreignId('store_id')->constrained();
             $table->string('discount');
+            $table->enum('discount_type',['percent','amount']);
             $table->enum('type',['returned','purchase']);
-            $table->string('total_without_discount');
-            $table->string('total');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -33,4 +32,5 @@ return new class extends Migration
     {
         Schema::dropIfExists('purchases');
     }
+
 };

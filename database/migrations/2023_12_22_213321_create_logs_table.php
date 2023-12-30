@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('opration');
             $table->morphs('maker');
-            $table->morphs('on_table');
+            $table->morphs('reference');
             $table->timestamps();
         });
     }
