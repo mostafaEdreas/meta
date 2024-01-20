@@ -10,8 +10,8 @@ trait GlobalTrait
 {
     private function getPeriodData($request){
         $currentDate = Carbon::now();
-        $date['from'] = $request['from']?date_format($request['from'],'Y-m-d'):date_format($currentDate->startOfMonth(),'Y-m-d');
-        $date['to'] = $request['to']?date_format($request['to'],'Y-m-d'):date_format($currentDate,'Y-m-d');
+        $date['from'] =$request&& $request['from']?date_format(Carbon::parse($request['from']),'Y-m-d'):date_format($currentDate->startOfMonth(),'Y-m-d');
+        $date['to'] = $request&&$request['to']?date_format(Carbon::parse($request['to']),'Y-m-d'):date('Y-m-d');
         return $date;
     }
 

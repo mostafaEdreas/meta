@@ -28,6 +28,9 @@ class UserController extends Controller
     }
     public function store(UserRequest $request){
         $newUser =  $request->all();
+        if (auth()->user()->rule_id != 3 && ($newUser['rule_id'] == 2 || $newUser['rule_id'] == 3)){
+            return redirect()->back()->withErrors('اجراء غير مسموح به');
+        }
         $user = User::create($newUser);
         if($user){
             return redirect()->back()->with("succ","تم اضافة ". $newUser['name'].'بنجاح' );
@@ -48,6 +51,10 @@ class UserController extends Controller
             return redirect()->back()->withErrors("لم يتم تنشيط الحساب ");
         }
         return redirect()->back()->with("succ","تم تنشيط الحساب");
+    }
 
+    public function changeImg(){
+       $this->userService->saveIamge('img');
+        return redirect()->back();
     }
 }

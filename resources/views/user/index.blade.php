@@ -1,69 +1,48 @@
 @extends('layout.main')
 @section('style')
-    <style>
-        /* Basic table styling */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-family: Arial, sans-serif;
-        }
-
-        th,
-        td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        tr:hover {
-            background-color: #f1f1f1;
-        }
-    </style>
+<link rel="stylesheet" href="{{ asset('assets/css/tables.css') }}">
 @endsection
 @section('content')
     <section>
-        <div class="d-flex justify-content-between container pt-5">
+        <div class="d-flex justify-content-between container-md">
             <h3 class="myHeading"> المستخدمين</h3>
             <a class="btn btn-primary" href="{{ route('user.create') }}">
                 جديد +
             </a>
         </div>
         <hr>
-        <div class="container">
+        <div class="">
             <form action="{{ route('user.index') }}" method="get">
-                <div class="form-control mt-5" >
-                    <div class="d-flex justify-content-around mt-5">
-                        <div class="form-check">
-                            <input class="form-check-input " type="radio" name ='active' value="1" id="active" @if (request()->input('active')===null|| request()->input('active')==='1') checked @endif>
-                            <label class="form-check-label" for="active">
+                <div class="container-md" >
+                    <div class="row justify-content-between">
+                        <div class=" col-sm-12 col-md-4 mt-3 ">
+                            <div class="input-group-text">
+                                <input class="form-check-input mt-0 " type="radio" name ='active' value="1" id="active" @if (request()->input('active')===null|| request()->input('active')==='1') checked @endif>
+                            </div>
+                            <label class="form-control form-control-lg" for="active">
                                 نشط
                             </label>
                         </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name ='active' value="0" id="unActive" @if ( request()->input('active')==='0') checked @endif>
-                            <label class="form-check-label " for="unActive">
+                        <div class=" col-sm-12 col-md-4 mt-3">
+                            <div class="input-group-text">
+                                <input class="form-check-input mt-0" type="radio" name ='active' value="0" id="unActive" @if ( request()->input('active')==='0') checked @endif>
+                            </div>
+                            <label class="form-control form-control-lg" for="unActive">
                                 غير نشط
                             </label>
-                           
                         </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name ='active' value="2" id="all"@if ( request()->input('active')==='2') checked @endif>
-                            <label class="form-check-label" for="all">
+                        <div class=" col-sm-12 col-md-4 mt-3 ">
+                            <div class="input-group-text">
+                                <input class="form-check-input mt-0" type="radio" name ='active' value="2" id="all"@if ( request()->input('active')==='2') checked @endif>
+                            </div>
+                            <label class="form-control" for="all">
                                 الكل
                             </label>
                         </div>
                     </div>
                     <div class="row">
-                        <div class=" mt-5 cal-12">
-                            <select name="rule_id" id="rule_id" class="form-control select2">
+                        <div class="  col-sm-12 col-md-4 mt-3 justify-content-between">
+                            <select name="rule_id" id="rule_id" class="form-select form-select-lg select2">
                                 <option class="myHeading form-select" @readonly(true) value="" aria-label="Default select example">اختر نوع المستخدم</option>
                                 @foreach ($rules as $rule)
                                     <option class="myHeading" value="{{ $rule->id }}" {{ request()->input('rule_id') == $rule->id ? 'selected' : '' }}>{{ $rule->name }}</option>
@@ -71,17 +50,17 @@
                             </select>
                              {{-- @dd(request()->input('rule_id')) --}}
                         </div>
-                        <div class="col-4 mt-5">
-                          <input type="text" name="name" class="form-control" value="{{request()->input('name')}}" placeholder="الاسم" aria-label="First name">
+                        <div class="col-sm-12 col-md-4 mt-3 justify-content-between">
+                          <input type="text" name="name" class="form-control form-control-lg" value="{{request()->input('name')}}" placeholder="الاسم" aria-label="First name">
                         </div>
-                        <div class="col-4 mt-5">
-                          <input type="text" name="phone" class="form-control" placeholder="الهاتف" value="{{request()->input('phone')}}" aria-label="Last name">
+                        <div class="col-sm-12 col-md-4 mt-3 justify-content-between">
+                          <input type="text" name="phone" class="form-control form-control-lg" placeholder="الهاتف" value="{{request()->input('phone')}}" aria-label="Last name">
                         </div>
-                        <div class="col-4 mt-5">
-                            <input type="text" name="email" class="form-control" placeholder="الايميل" value="{{request()->input('email')}}" aria-label="Last name">
+                        <div class="col-sm-12 col-md-4 mt-3 justify-content-between">
+                            <input type="text" name="email" class="form-control form-control-lg" placeholder="الايميل" value="{{request()->input('email')}}" aria-label="Last name">
                         </div>
-                        <div class="col-4 mt-5">
-                            <input type="text" name="address" class="form-control" placeholder="العنوان" value="{{request()->input('address')}}" aria-label="Last name">
+                        <div class="col-sm-12 col-md-4 mt-3 justify-content-between">
+                            <input type="text" name="address" class="form-control form-control-lg" placeholder="العنوان" value="{{request()->input('address')}}" aria-label="Last name">
                         </div>
                       </div>
 
@@ -168,7 +147,7 @@
                         @elseif ($users->lastPage() > 1)
                         <tr>
                             <td class="text-center" colspan="6">
-                                @include('includes.pagination')
+                                @include('includes.pagination',['paginator'=> $users])
                             </td>
                         </tr>
                         @endif
@@ -178,14 +157,9 @@
             </table>
         </div>
     </section>
-    <div class="text-center container">
+    <div class="text-center container-md">
        
     </div>
 @endsection
 @section('script')
-<script>
-    $(document).ready(function() {
-  $('.select2').select2();
-});
-</script>
 @endsection

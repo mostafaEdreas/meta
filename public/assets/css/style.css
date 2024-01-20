@@ -1,6 +1,6 @@
 :root {
     --primary-color: #0085a4;
-    --drop-dow-color:#75dbe7;
+    --drop-dow-color:#20d4e8;
     /* --text-color-white: #ffffff; */
   }
   
@@ -14,15 +14,20 @@ body{
     font-family: 'Amiri', serif;
 }
 section{
-    padding: 5rem;
-    margin: 1rem;
+    padding: 1rem;
+    margin-top: 1rem;
     box-shadow: 0 0 5 rgba(0, 0, 0, 0.527);
     background-color: var(--text-color-white);
     border-radius: 20px;
     height: inherit;
 }
-.dx-datagrid .dx-datagrid-headers .dx-datagrid-header {
-    background-color: #6666; /* Set your desired background color */
+.btn-primary,.bg-primary
+{
+    background-color: #02a2c6 !important;
+}
+.btn-info,.bg-info
+{
+    background-color: #5ad7f3 !important;
 }
 .myHeading {
     color: gray; /* Change text color to gray */
@@ -34,6 +39,7 @@ nav *{
 }
 nav {
     background-color: var(--primary-color) !important;
+
 }
 .dropdown li a{
     color: var(--primary-color) !important;
@@ -43,23 +49,27 @@ nav {
 }
 img{
     width: 100%;
-    display: inline-block;
+    display:block;
+    
 }
 .relative{
     position: relative;
 }
 .coverUserImgSmall{
-    width:4rem ;
+    width:3rem ;
+    height:3rem;
     border-radius: 50%;
+    overflow: hidden;
+   
 }
 .arrow-hidden::after {
     display: none !important;
 }
-.absoluteArrwo{
+/* .absoluteArrwo{
     position: absolute;
     top: 40%;
-    left: 0;
-}
+    bottom: -5;
+} */
 .home{
     display: flex;
     flex-wrap: wrap;
@@ -92,4 +102,38 @@ img{
 .btnHover:hover{
     background-color: #ffffff;
     color: black;
+}
+
+.removeRadius{
+    border-radius: 0 !important;
+}
+.productCoverImg{
+    overflow: hidden;
+}
+
+#indexProduct {
+    z-index: 1050 !important; /* Default Bootstrap z-index for modals is 1050 */
+}
+
+#dailoge {
+    z-index: 1060 !important; /* Set a higher z-index for the second modal to make it appear above the first modal */
+}
+.select2-container--default .select2-selection--single {
+    height: 40px; /* Adjust the height as needed */
+    width: 100% !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 40px; /* Match the height to center the text vertically */
+    width: 100% !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 40px; /* Match the height to center the arrow vertically */
+}
+
+.card-img-top{
+    width:100% ;
+    height: 18rem; 
+   overflow: hidden;
 }

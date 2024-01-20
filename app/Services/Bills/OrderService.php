@@ -4,6 +4,7 @@ namespace App\Services\Bills;
 
 use App\Models\Order;
 use App\Models\OrderProduct;
+use App\Models\SiteConfig;
 use App\Traits\GlobalTrait;
 
 
@@ -11,17 +12,59 @@ class OrderService
 {
 
     use GlobalTrait;
-    public  function getOrderByIdOrReference($idOrReference)
+    public function getOrders($relation =[])
     {
-        return Order::where('id', $idOrReference)->orWhere('ref', $idOrReference);
-    }
-    public  function getOrderByDate($date)
-    {
-        $date = $this->getPeriodData($date);
-        $orders = Order::whereBetween('created_at', [$date['from'], $date['to']])->orderBy('created_at', 'asc');
+        $orders = Order::where('type','order')->with($relation);
+        $orders = $this->invoiceFilter($orders);
         return $orders;
     }
+    public  function getOrderByIdOrReference($idOrReference)
+    {
+        return Order::where('id', $idOrReference)->orWhere('reference', $idOrReference)->get();
+    }
+    public  function getOrderByDate($data,$date=null)
+    {
+        $date = $this->getPeriodData($date);
+        $orders = $data->where('created_at', '>=',$date['from'])->orWhere('created_at','=<',$date['to']);
+        return $orders;
+    }
+    public function getOrdersGreaterThan($data, $price)
+    {
+      
+        if($price){
+            $data = $data->filter(function ($invoice,) use ($price) {
+                return $invoice->invoiceNet > $price;
+            }); 
+        }
+        return $data;
+    }
 
+    public function getOrdersLessThan($data, $price)
+    {
+        if($price){
+            $data = $data->filter(function ($invoice,) use ($price) {
+                return $invoice->invoiceNet < $price;
+            });
+        }
+        return $data;
+    }
+
+    public function invoiceFilter($data)
+    {
+        $request = request()->all();
+        if (request()->has('reference')&& $request['reference']) {
+            dd($data);
+            return $this->getOrderByIdOrReference(request()->input('reference'));
+        }
+        $data = $this->getOrderByDate($data,$request)->get();
+        if (request()->has('greater_price') && $request['greater_price']) {
+            $data =  $this->getOrdersGreaterThan($data, request()->input('greater_price'));
+        }
+        if (request()->has('less_price')&& $request['less_price']) {
+            $data =  $this->getOrdersLessThan($data, request()->input('less_price'));
+        }
+        return $data ;
+    }
     public function createOrder($data)
     {
         try {
@@ -65,20 +108,34 @@ class OrderService
         }
     }
 
-    public function setTatals($orders)
+    public function addProductForInvoice($products, $id)
     {
-
-        foreach ($orders as $order) {
-            foreach ($order->products as $Product) {
-                $order->discount_value = 0;
-                if ($Product->discount_type == 'percent') {
-                    
-                    $order->discount_value += ($Product->purchase_price * $Product->quantity) - ((($Product->purchase_price * $Product->quantity) * $Product->discount) / 100);
-                } else {
-                    $order->discount_value += (($Product->purchase_price * $Product->quantity) - $Product->discount);
-                }
+        try {
+          
+            foreach ($products['product_id'] as $key => $value) {
+                $dataHandle[$value] = [
+                    'quantity' => $products['quantity'][$key],
+                    'discount_p' => $products['discount_p'][$key],
+                    'discount_type_p' => $products['discount_type_p'][$key],
+                    'price' => $products['price'][$key],
+                    'created_at' => now(),
+                    'updated_at'=> now(),
+                ];
+                Order::find($id)->products()->sync($dataHandle);
             }
+            return  true;
+        } catch (\Exception $ex) {
+            dd($ex->getMessage());
         }
-        return $orders ;
+    }
+    public function setOrderNum()
+    {
+        try {
+            $num = SiteConfig::where('key', 'order_number')->first()->value;
+            $num++;
+            SiteConfig::where('key', 'order_number')->first()->update(['value' => $num]);
+        } catch (\Exception $ex) {
+            dd($ex->getMessage());
+        }
     }
 }

@@ -17,8 +17,8 @@ return new class extends Migration
             $table->foreignId('customer_id')->constrained();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('store_id')->constrained();
-            $table->string('discount');
-            $table->enum('discount_type',['percent','amount']);
+            $table->decimal('discount',7,2)->nullable();
+            $table->enum('discount_type',['percent','amount'])->default('amount');
             $table->enum('type',['returned','order']);
             $table->softDeletes();
             $table->timestamps();

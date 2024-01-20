@@ -15,9 +15,10 @@ class IsAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(!auth()->user()->rule_id == 1 || !auth()->user()->rule_id == 2){
-            return abort(403);
+        if(auth()->check()&&(auth()->user()->rule_id == 2 || auth()->user()->rule_id == 3)){
+            return $next($request);
         }
-        return $next($request);
+        return abort(403);
+     
     }
 }

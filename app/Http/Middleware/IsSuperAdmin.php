@@ -15,10 +15,10 @@ class IsSuperAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(!auth()->user()->rule == 1 ){
-            return abort(403);
+        if(auth()->check()&&auth()->user()->rule == 1 ){
+            return $next($request);
         }
-        return $next($request);
-
+        return abort(403);
+      
     }
 }

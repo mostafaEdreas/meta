@@ -1,33 +1,33 @@
 <div class="pagination-wrapper">
     <div class="pagination">
-        <a class="prev page-numbers" {{$users->currentPage()> 1? 'href='.$users->previousPageUrl():'disabled'}} >السابق</a>
-        @if ( $users->currentPage()== 1)
-            <span aria-current="page" class="page-numbers current">{{$users->currentPage()}}</span>
-            @if ($users->lastPage() >1)
-                <a class="page-numbers" href="{{$users->nextPageUrl()}}">{{$users->currentPage() + 1}}</a>
-                @if ($users->lastPage() >2)
-                    <a class="page-numbers" href="{{$users->url(3)}}">{{$users->currentPage() + 2}}</a>
+        <a class="prev page-numbers" {{$paginator->currentPage()> 1? 'href='.$paginator->previousPageUrl():'disabled'}} >السابق</a>
+        @if ( $paginator->currentPage()== 1)
+            <span aria-current="page" class="page-numbers current">{{$paginator->currentPage()}}</span>
+            @if ($paginator->lastPage() >1)
+                <a class="page-numbers" href="{{$paginator->nextPageUrl()}}">{{$paginator->currentPage() + 1}}</a>
+                @if ($paginator->lastPage() >2)
+                    <a class="page-numbers" href="{{$paginator->url(3)}}">{{$paginator->currentPage() + 2}}</a>
                 @endif
             @endif
         @endif
-        @if ($users->currentPage() > 1  &&  $users->lastPage() > 2 && $users->currentPage()!=  $users->lastPage() )
-            <a class="page-numbers" href="{{$users->previousPageUrl()}}">{{$users->currentPage() - 1}}</a>
-            <span aria-current="page" class="page-numbers current">{{$users->currentPage()}}</span>
-            <a class="page-numbers" href="{{$users->nextPageUrl()}}">{{$users->currentPage() + 1}}</a>
+        @if ($paginator->currentPage() > 1  &&  $paginator->lastPage() > 2 && $paginator->currentPage()!=  $paginator->lastPage() )
+            <a class="page-numbers" href="{{$paginator->previousPageUrl()}}">{{$paginator->currentPage() - 1}}</a>
+            <span aria-current="page" class="page-numbers current">{{$paginator->currentPage()}}</span>
+            <a class="page-numbers" href="{{$paginator->nextPageUrl()}}">{{$paginator->currentPage() + 1}}</a>
         @endif
-        @if ($users->currentPage() ==  $users->lastPage())
-            @if ($users->lastPage()>1)
-                @if ($users->lastPage()>2)
-                    <a class="page-numbers" href="{{$users->previousPageUrl()}}">{{$users->currentPage() - 2}}</a>
+        @if ($paginator->currentPage() ==  $paginator->lastPage())
+            @if ($paginator->lastPage()>1)
+                @if ($paginator->lastPage()>2)
+                    <a class="page-numbers" href="{{$paginator->previousPageUrl()}}">{{$paginator->currentPage() - 2}}</a>
                 @endif
-                <a class="page-numbers" href="{{$users->previousPageUrl()}}">{{$users->currentPage() - 1}}</a>
+                <a class="page-numbers" href="{{$paginator->previousPageUrl()}}">{{$paginator->currentPage() - 1}}</a>
             @endif
-            <span aria-current="page" class="page-numbers current">{{$users->currentPage()}}</span>
+            <span aria-current="page" class="page-numbers current">{{$paginator->currentPage()}}</span>
         @endif
-      @if ($users->lastPage()> 3)
+      @if ($paginator->lastPage()> 3)
       <span aria-current="page" class="page-numbers ">...</span>
-      <a class="page-numbers" href="{{$users->url($users->lastPage())}}">{{$users->lastPage()}}</a>
+      <a class="page-numbers" href="{{$paginator->url($paginator->lastPage())}}">{{$paginator->lastPage()}}</a>
       @endif
-      <a class="prev page-numbers" {{$users->lastPage()> $users->currentPage()? 'href='.$users->nextPageUrl():'disabled'}} >التالى</a>
+      <a class="prev page-numbers" {{$paginator->lastPage()> $paginator->currentPage()? 'href='.$paginator->nextPageUrl():'disabled'}} >التالى</a>
     </div>
   </div>

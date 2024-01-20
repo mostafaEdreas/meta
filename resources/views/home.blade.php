@@ -1,7 +1,7 @@
 @extends('layout.main')
 @section('content')
 <section>
-    <div class="container">
+    <div class="container-md">
         <div class="home">
             @foreach ($carts as $cart )
             <div class="shadow  p-3 m-3 d-flex flex-column align-items-center homeCarts d-inline-block">

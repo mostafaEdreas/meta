@@ -16,11 +16,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('purchase_id')->constrained();
             $table->foreignId('product_id')->constrained();
-            $table->string('quantity');
-            $table->decimal('purchase_price',8,2);
-            $table->decimal('sale_price',8,2);
-            $table->string('discount');
-            $table->enum('discount_type', ['percent','amount'])->default('amount');
+            $table->unsignedBigInteger('quantity');
+            $table->decimal('purchase_price',7,2);
+            $table->decimal('sale_price',7,2);
+            $table->decimal('discount_p',7,2)->nullable();
+            $table->enum('discount_type_p', ['percent','amount'])->default('amount');
             $table->softDeletes();
             $table->timestamps();
         });
