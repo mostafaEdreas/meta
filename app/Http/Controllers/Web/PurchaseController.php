@@ -10,6 +10,7 @@ use App\Models\Purchase;
 use App\Models\PurchaseProduct;
 use App\Models\Store;
 use App\Models\Supplier;
+use App\Models\User;
 use App\Services\Bills\PurchaseService;
 use App\Traits\GlobalTrait;
 use Exception;
@@ -24,6 +25,7 @@ class PurchaseController extends Controller
         $this->purchaseService = $purchaseService;
     }
     public function index(){
+        $data['users']= User::select('id','name')->get();
         $data['purchases'] = $this->purchaseService->getPurchases(['user']);
         return view("invoice.purchase.index",$data);
     }

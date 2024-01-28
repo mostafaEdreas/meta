@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Purchase extends Model
 {
+
     use HasFactory,SoftDeletes;
     
     protected $fillable = ['reference','supplier_id','discount','user_id','store_id','discount_type','type'] ;
@@ -24,37 +25,27 @@ class Purchase extends Model
         return $this->belongsTo(User::class);
     }
     public function products(){
-        return $this->belongsToMany(Product::class,'purchase_products')->withPivot(['quantity','discount_p','discount_type_p','purchase_price','sale_price'])->selectRaw('CASE WHEN discount_type_p = "percent" then (quantity * purchase_price) - (quantity *purchase_price  * (discount_p/ 100)) ELSE (quantity * purchase_price) - (discount_p * quantity) END AS total');
+        return $this->belongsToMany(Product::class,'purchase_products')->withPivot(['quantity','discount_p','discount_type_p','purchase_price','sale_price'])->selectRaw('CASE WHEN discount_type_p = "percent" then (quantity * purchase_price) - (quantity *purchase_price  * (discount_p/ 100)) ELSE (quantity * purchase_price) - (discount_p) END AS total');
     }
     public function supplier(){
         return $this->belongsTo(Supplier::class);
     }
 
     public function getTotalInvoiceWithoutDiscountAttribute(){
-        $value = $this->products->sum('pivot.purchase_price') *  $this->getQuantitiesNumberAttribute();
-        return (float) number_format($value, 2, '.', '');
+        $amountAndPercent =  $this->amountAndPercent();
+        return (float) number_format($amountAndPercent->total, 2, '.', '');
     }
 
     public function getQuantitiesNumberAttribute(){
-        $value = $this->products->sum('pivot.quantity');
+        $value = PurchaseProduct::where('purchase_id',$this->id)->sum('quantity');
         return (float) number_format($value, 2, '.', '');
     }
 
     public function getDiscountOnProductsAttribute():object {
-        $values = $this->products;
-        $amount = 0 ;
-        foreach ($values as $key => $value) {
-            if($value->pivot->discount_type_p == 'amount'){
-                $amount += $value->pivot->discount_p * $value->pivot->quantity;
-            }else {
-                $amount += $value->pivot->discount_p  * $value->pivot->quantity  *( $value->pivot->purchase_price / 100);
-            }
-        }
-        $total = $this->getTotalInvoiceWithoutDiscountAttribute();
-        $percent = ($amount / $total) * 100;
+        $amountAndPercent =  $this->amountAndPercent();
         return (object)[
-            'amount'=> (float) number_format($amount, 2, '.', ''),
-            'percent'=> (float) number_format($percent, 2, '.', '')
+            'amount'=> (float) number_format($amountAndPercent->amount, 2, '.', ''),
+            'percent'=> (float) number_format($amountAndPercent->percent, 2, '.', '')
         ];
     }
 
@@ -83,5 +74,25 @@ class Purchase extends Model
     public function getInvoiceNetAttribute(){
         $net = $this->getTotalInvoiceAfterDiscountOnOnlyProductesAttribute() - $this->getDiscountOnInvoiceAttribute()->amount;
         return  (float) number_format($net, 2, '.', '');
+    }
+    private function amountAndPercent(){
+        $values =  PurchaseProduct::where('purchase_id',$this->id)->get();
+        $amount = 0 ;
+        $total = 0;
+        foreach ($values as $key => $value) {
+            if($value->discount_type_p == 'amount'){
+                $amount += $value->discount_p ;
+                $total += $value->purchase_price;
+            }else {
+                $amount += $value->purchase_price  * $value->quantity  * ($value->discount_p / 100);
+                $total += $value->purchase_price * $value->quantity;
+            }
+        }
+        $percent = ($amount / $total) * 100;
+        return (object)[
+            'amount'=> (float) number_format($amount, 2, '.', ''),
+            'percent'=> (float) number_format($percent, 2, '.', ''),
+            'total'=> (float) number_format($total, 2, '.', '')
+        ];
     }
 }

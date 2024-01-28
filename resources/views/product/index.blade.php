@@ -3,6 +3,24 @@
 @endsection
 @section('content')
     <section class="">
+        @if ($errors->any())
+        <div class="alert alert-danger text-start" role="alert">
+
+            <div>
+                <ul>
+
+                </ul>
+                @foreach ($errors->all() as $error)
+                    <li> {{ $error }}</li>
+                @endforeach
+            </div>
+        </div>
+    @endif
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
         <div class="d-flex justify-content-between container-md">
             <h3 class="myHeading"> المستخدمين</h3>
             <a class="btn btn-primary "onclick="makeSaveModal()" data-bs-toggle="modal" data-bs-target="#dailoge">

@@ -9,6 +9,7 @@ use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Store;
+use App\Models\User;
 use App\Services\Bills\OrderService;
 use Exception;
 use Illuminate\Http\Request;
@@ -21,6 +22,7 @@ class OrderController extends Controller
         $this->orderService = $orderService;
     }
     public function index(){
+        $data['users']= User::select('id','name')->get();
         $data['orders'] = $this->orderService->getOrders(['user']);
         return view("invoice.order.index",$data);
     }

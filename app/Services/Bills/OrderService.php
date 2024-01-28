@@ -53,8 +53,10 @@ class OrderService
     {
         $request = request()->all();
         if (request()->has('reference')&& $request['reference']) {
-            dd($data);
             return $this->getOrderByIdOrReference(request()->input('reference'));
+        }
+        if (request()->has('user_id')&& $request['user_id']) {
+            $data = $data->where('user_id', $request['user_id']);
         }
         $data = $this->getOrderByDate($data,$request)->get();
         if (request()->has('greater_price') && $request['greater_price']) {

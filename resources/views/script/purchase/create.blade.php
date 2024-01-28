@@ -18,10 +18,10 @@
                 @endforeach
             </select>  
         </td>
-        <td><input type="number" name="purchase_price[]" value="0" class="purchase_price form-control form-control-lg"></td>
-        <td><input type="number" name="sale_price[]" value="0" class="sale_price form-control form-control-lg"></td>
-        <td><input type="number" name="quantity[]" value="1" class="quantity form-control form-control-lg"></td>
-        <td><input type="number" name="discount_p[]" value="0" class="discount form-control form-control-lg"></td>
+        <td><input type="text" name="purchase_price[]" value="0" class="purchase_price form-control form-control-lg"></td>
+        <td><input type="text" name="sale_price[]" value="0" class="sale_price form-control form-control-lg"></td>
+        <td><input type="text" name="quantity[]" value="1" class="quantity form-control form-control-lg"></td>
+        <td><input type="text" name="discount_p[]" value="0" class="discount form-control form-control-lg"></td>
         <td>                            
             <select class=" type form-select form-select-lg" name="discount_type_p[]" aria-label=".form-select-lg example">
                 <option value="amount">مبلغ</option>
@@ -83,10 +83,10 @@
                         @endforeach
                     </select>
                 </td>
-                <td><input type="number" name="purchase_price[]" value="0" class="purchase_price form-control form-control-lg"></td>
-                <td><input type="number" name="sale_price[]" value="0" class="sale_price form-control form-control-lg"></td>
-                <td><input type="number" name="quantity[]" value="1" class="quantity form-control form-control-lg"></td>
-                <td><input type="number" value="0" name="discount_p[]" class="discount form-control form-control-lg"></td>
+                <td><input type="text" name="purchase_price[]" value="0" class="purchase_price form-control form-control-lg"></td>
+                <td><input type="text" name="sale_price[]" value="0" class="sale_price form-control form-control-lg"></td>
+                <td><input type="text" name="quantity[]" value="1" class="quantity form-control form-control-lg"></td>
+                <td><input type="text" value="0" name="discount_p[]" class="discount form-control form-control-lg"></td>
                 <td>
                     <select class=" type form-select form-select-lg" name="discount_type_p[]" aria-label=".form-select-lg example">
                         <option value="amount">مبلغ</option>
@@ -145,7 +145,7 @@
             parent.find('.sale_price').val(0)
             parent.find('.quantity').val(1);
             parent.find('.discount').val(0);
-            parent.find('.total').html(0);
+            parent.find('.total').text(0);
             parent.find('.type').val('amount').change();
         } else {
             $(this).val('').change();
@@ -179,11 +179,11 @@
         let discount = parseFloat(parent.find('.discount').val());
         let total = 0;
         if (type == 'percent') {
-            total = (purchasePrice * quantity) - ((purchasePrice * discount * quantity) / 100) || 0
+            total = (purchasePrice * quantity) - (purchasePrice * (discount/ 100) * quantity) || 0
         } else {
-            total = (purchasePrice * quantity) - (discount * quantity)
+            total = (purchasePrice * quantity) - (discount)
         }
-        parent.find('.total').html(total.toFixed(2) || 0);
+        parent.find('.total').text(total.toFixed(2) || 0);
         setIvoiceDetails()
     }
     $('#discount_invoice').on('change', function() {
@@ -196,9 +196,9 @@
 
     function onTypeOrDiscountChanges() {
         let obj = getTotalDiscountForInvoice()
-        $('#total_discount_on_invoice_amount').val(obj.amount || 0);
-        $('#total_discount_on_invoice_percent').val(obj.percent || 0);
-        $('#net').html(obj.net || 0);
+        $('#total_discount_on_invoice_amount').text(obj.amount || 0);
+        $('#total_discount_on_invoice_percent').text(obj.percent || 0);
+        $('#net').text(obj.net || 0);
     }
 
     function getTotalQuantityForInvice() {
@@ -228,9 +228,9 @@
             let dicountValue = parseFloat($(this).val()) || 0;
             let purchasePriceValue = parseFloat($(this).parent().parent().find('.purchase_price').val() || 0)
             if (type == 'percent') {
-                sum += (purchasePriceValue * dicountValue * quantity) / 100 || 0;
+                sum += (purchasePriceValue * (dicountValue/ 100) * quantity)  || 0;
             } else {
-                sum += dicountValue * quantity;
+                sum += dicountValue ;
             }
 
         });
@@ -245,7 +245,7 @@
     function getTotalNetPurchasePriceForInvice() {
         let sum = 0;
         $('#tbodyPurchase').find('.total').each(function() {
-            let total = parseFloat($(this).html()) || 0;
+            let total = parseFloat($(this).text()) || 0;
             sum += total;
         });
         return sum.toFixed(2) || 0;
@@ -260,8 +260,8 @@
         let amount = 0;
 
         if (type == 'percent') {
-            total = totalAmount - ((totalAmount * discount) / 100 || 0);
-            amount = (discount * totalAmount) / 100 || 0;
+            total = totalAmount - (totalAmount * (discount / 100) || 0);
+            amount = (discount/ 100 ) * totalAmount || 0;
             percent = discount;
         } else {
             total = totalAmount - discount;
@@ -285,14 +285,14 @@
         let dicountValue = getTotalDiscountForInvoice().amount;
         let dicountPercent = getTotalDiscountForInvoice().percent;
         let net = getTotalDiscountForInvoice().net;
-        $('#total_invoice').html(total + 'ج')
-        $('#total_quantity').html(quantity)
-        $('#total_discount_on_product_amount').html(productDiscountValue + 'ج')
-        $('#total_discount_on_product_percent').html(productDiscountPercent + '%')
-        $('#net_on_products').html(netProduct + 'ج')
-        $('#total_discount_on_invoice_amount').html(dicountValue + 'ج')
-        $('#total_discount_on_invoice_percent').html(dicountPercent + '%')
-        $('#net').html(net + '')
+        $('#total_invoice').text(total + 'ج')
+        $('#total_quantity').text(quantity)
+        $('#total_discount_on_product_amount').text(productDiscountValue + 'ج')
+        $('#total_discount_on_product_percent').text(productDiscountPercent + '%')
+        $('#net_on_products').text(netProduct + 'ج')
+        $('#total_discount_on_invoice_amount').text(dicountValue + 'ج')
+        $('#total_discount_on_invoice_percent').text(dicountPercent + '%')
+        $('#net').text(net + '')
     }
     setIvoiceDetails()
 </script>

@@ -25,7 +25,7 @@ class Order extends Model
         return $this->belongsTo(User::class);
     }
     public function products(){ 
-        return $this->belongsToMany(Product::class,'order_products')->withPivot(['quantity','discount_p','discount_type_p','price'])->selectRaw('CASE WHEN discount_type_p = "percent" then (quantity * price) - (quantity *price  * (discount_p/ 100)) ELSE (quantity * price) - (discount_p * quantity) END AS total');
+        return $this->belongsToMany(Product::class,'order_products')->withPivot(['quantity','discount_p','discount_type_p','price'])->selectRaw('CASE WHEN discount_type_p = "percent" then (quantity * price) - (quantity *price  * (discount_p/ 100)) ELSE (quantity * price) - (discount_p) END AS total');
     }
 
 
@@ -35,8 +35,8 @@ class Order extends Model
     
     
     public function getTotalInvoiceWithoutDiscountAttribute(){
-        $value = OrderProduct::where('order_id',$this->id)->sum('price') *  $this->getQuantitiesNumberAttribute();
-        return floatval (number_format($value, 2, '.', ''));
+        $amountAndPercent =  $this->amountAndPercent();
+        return (float) number_format($amountAndPercent->total, 2, '.', '');
     }
 
     public function getQuantitiesNumberAttribute(){
@@ -45,22 +45,11 @@ class Order extends Model
     }
 
     public function getDiscountOnProductsAttribute():object {
-        $values =  OrderProduct::where('order_id',$this->id)->get();
-        $amount = 0 ;
-        foreach ($values as $key => $value) {
-            if($value->discount_type_p == 'amount'){
-                $amount += $value->discount_p * $value->quantity;
-                $value['total'] = ($value->price * $value->quantity) - ($value->discount_p * $value->quantity) ;
-            }else {
-                $amount += ($value->discount_p  * $value->quantity  * $value->price) / 100;
-                $value['total'] = ($value->price * $value->quantity) - ($value->discount_p * $value->quantity *($value->discount_p/100)) ;
-            }
-        }
-        $total = $this->getTotalInvoiceWithoutDiscountAttribute();
-        $percent = ($amount / $total) * 100;
+
+        $amountAndPercent =  $this->amountAndPercent();
         return (object)[
-            'amount'=> number_format($amount, 2, '.', ''),
-            'percent'=> number_format($percent, 2, '.', '')
+            'amount'=> (float) number_format($amountAndPercent->amount, 2, '.', ''),
+            'percent'=> (float) number_format($amountAndPercent->percent, 2, '.', '')
         ];
     }
 
@@ -77,7 +66,7 @@ class Order extends Model
             $amount = $discount;
             $percent = ($discount / $netProducts) *100;
         }else {
-            $amount = ($discount * $netProducts) /100 ;
+            $amount = ($discount /100) * $netProducts ;
             $percent = $discount;
         }
         return (object)[
@@ -90,5 +79,25 @@ class Order extends Model
         $net = $this->getTotalInvoiceAfterDiscountOnOnlyProductesAttribute() - $this->getDiscountOnInvoiceAttribute()->amount;
         return   number_format($net, 2, '.', '');
     }
-   
+    private function amountAndPercent(){
+        $values =  OrderProduct::where('order_id',$this->id)->get();
+        $amount = 0 ;
+        $total = 0;
+        foreach ($values as $key => $value) {
+            if($value->discount_type_p == 'amount'){
+                $amount += $value->discount_p;
+                $total += $value->price;
+            }else {
+                $amount += ( $value->quantity  * $value->price * ($value->discount_p/ 100)) ;
+                $total += $value->price * $value->quantity;
+            }
+        }
+       
+        $percent = ($amount / $total) * 100;
+        return (object)[
+            'amount'=> number_format($amount, 2, '.', ''),
+            'percent'=> number_format($percent, 2, '.', ''),
+            'total'=> number_format($total, 2, '.', '')
+        ];
+    }
 }

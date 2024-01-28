@@ -43,12 +43,12 @@
                 </div>
                 <div class="col-sm-12 col-md-4 mt-3 justify-content-between">
                     <label class="">الخصم</label>
-                    <input class="form-control form-control-lg" readonly name="discount" type="text"
+                    <input class="form-control form-control-lg" id="discount_invoice" readonly name="discount" type="text"
                         value="{{ $purchase->discount }}" aria-label="default input example">
                 </div>
                 <div class="col-sm-12 col-md-4 mt-3 justify-content-between">
                     <label class="">نوع الخصم</label>
-                    <select class="form-select form-select-lg " disabled name="discount_type"
+                    <select class="form-select form-select-lg " id="discount_type_invoice"  disabled name="discount_type"
                         aria-label=".form-select-lg example">
                         <option value="amount" {{ $purchase->discount_type == 'amount' ? 'selected' : '' }}>مبلغ</option>
                         <option value="percent" {{ $purchase->discount_type == 'percent' ? 'selected' : '' }}>نسبه مئوية
@@ -153,15 +153,15 @@
                                     @endforeach
                                 </select>
                             </td>
-                            <td><input type="number" name="purchase_price[]" readonly
+                            <td><input type="text" name="purchase_price[]" readonly
                                     value="{{ $value->pivot->purchase_price }}"
                                     class="purchase_price form-control form-control-lg"></td>
-                            <td><input type="number" name="sale_price[]" readonly value="{{ $value->pivot->sale_price }}"
+                            <td><input type="text" name="sale_price[]" readonly value="{{ $value->pivot->sale_price }}"
                                     class="sale_price form-control form-control-lg"></td>
-                            <td><input type="number" name="quantity[]" readonly
+                            <td><input type="text" name="quantity[]" readonly
                                     value="{{ $value->pivot->quantity }}"class="quantity form-control form-control-lg">
                             </td>
-                            <td><input type="number" readonly value="{{ $value->pivot->discount_p }}"
+                            <td><input type="text" readonly value="{{ $value->pivot->discount_p }}"
                                     name="discount_p[]"class="discount form-control form-control-lg"></td>
                             <td>
                                 <select class=" type form-select form-select-lg" disabled name="discount_type_p[]"

@@ -16,6 +16,13 @@
             margin-bottom: 8px;
         }
 
+        .select2{
+            margin-bottom: 16px;
+            width: calc(100% - 16px);
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
         input {
             width: calc(100% - 16px);
             padding: 8px;
@@ -35,10 +42,24 @@
                 <div class="col-lg-3 col-md-12">
                     <form action="{{ route('purchase.index') }}" method="GET">
                         <label for="fromDate">من فترة:</label>
-                        <input type="date" id="fromDate" name="from" required>
+                        <input type="date" id="fromDate" name="from" >
 
                         <label for="toDate">الى فترة:</label>
-                        <input type="date" id="toDate" name="to" required>
+                        <input type="date" id="toDate" name="to" >
+                        
+                        <label for="invoiceNumber">رقم الفاتورة:</label>
+                        <input type="text" id="invoiceNumber" name="reference">
+
+                        <label for="user_id">للبائع</label>
+                        <select class="select2"  name="user_id" id="user_id"
+                            aria-label="form-select-lg example">
+                            <option value="">اختر البائع</option>
+                            @foreach ($users as $user)
+                                <option value="{{ $user->id }}">
+                                    {{ $user->name }}
+                                </option>
+                            @endforeach
+                        </select>
 
                         <label for="totalGreater">بتكلفة اكبر</label>
                         <input type="number" id="totalGreater" name="greater_price" min="0">
@@ -46,10 +67,7 @@
                         <label for="totalLess">بتكلفة اقل:</label>
                         <input type="number" id="totalLess" name="less_price" min="0">
 
-                        <label for="invoiceNumber">رقم الفاتورة:</label>
-                        <input type="text" id="invoiceNumber" name="reference">
-
-                        <button type="submit" class="btn btn-primary">Search</button>
+                        <button type="submit" class="btn btn-primary">بحـث</button>
                     </form>
                 </div>
                 <div class="col-lg-9 col-md-12">

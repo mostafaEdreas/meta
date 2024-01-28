@@ -153,9 +153,9 @@
                                         @endforeach
                                     </select>
                                 </td>
-                                <td><input type="number" name="price[]" value="{{ old('price')[$key] ? old('price')[$key] : '0' }}" class="price form-control form-control-lg"></td>
-                                <td><input type="number" name="quantity[]" value="{{ old('quantity')[$key] ? old('quantity')[$key] : '1' }}"class="quantity form-control form-control-lg"></td>
-                                <td><input type="number" value="{{ old('discount_p')[$key] ? old('discount_p')[$key] : '0' }}" name="discount_p[]"class="discount form-control form-control-lg"></td>
+                                <td><input type="text" name="price[]" value="{{ old('price')[$key] ? old('price')[$key] : '0' }}" class="price form-control form-control-lg"></td>
+                                <td><input type="text" name="quantity[]" value="{{ old('quantity')[$key] ? old('quantity')[$key] : '1' }}"class="quantity form-control form-control-lg"></td>
+                                <td><input type="text" value="{{ old('discount_p')[$key] ? old('discount_p')[$key] : '0' }}" name="discount_p[]"class="discount form-control form-control-lg"></td>
                                 <td>
                                     <select class=" type form-select form-select-lg" name="discount_type_p[]" aria-label=".form-select-lg example">
                                         <option value="amount"

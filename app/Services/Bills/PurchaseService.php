@@ -64,6 +64,9 @@ class PurchaseService
         if (request()->has('reference') && $request['reference']) {
             return $this->getPurchaseByIdOrReference(request()->input('reference'));
         }
+        if (request()->has('user_id')&& $request['user_id']) {
+            $data = $data->where('user_id', $request['user_id']);
+        }
         $data = $this->getPurchaseByDate($data,$request)->get();
         if (request()->has('greater_price')&& $request['greater_price']) {
             $data =  $this->getPurchasesGreaterThan($data, request()->input('greater_price'));

@@ -158,16 +158,16 @@
                                             @endforeach
                                         </select>
                                     </td>
-                                    <td><input type="number" name="purchase_price[]"
+                                    <td><input type="text" name="purchase_price[]"
                                             value="{{ old('purchase_price')[$key] ? old('purchase_price')[$key] : '0' }}"
                                             class="purchase_price form-control form-control-lg"></td>
-                                    <td><input type="number" name="sale_price[]"
+                                    <td><input type="text" name="sale_price[]"
                                             value="{{ old('sale_price')[$key] ? old('sale_price')[$key] : '0' }}"
                                             class="sale_price form-control form-control-lg"></td>
-                                    <td><input type="number" name="quantity[]"
+                                    <td><input type="text" name="quantity[]"
                                             value="{{ old('quantity')[$key] ? old('quantity')[$key] : '1' }}"
                                             class="quantity form-control form-control-lg"></td>
-                                    <td><input type="number" value="{{ old('discount_p')[$key] ? old('discount_p')[$key] : '0' }}" name="discount_p[]"
+                                    <td><input type="text" value="{{ old('discount_p')[$key] ? old('discount_p')[$key] : '0' }}" name="discount_p[]"
                                             class="discount form-control form-control-lg"></td>
                                     <td>
                                         <select class=" type form-select form-select-lg" name="discount_type_p[]"

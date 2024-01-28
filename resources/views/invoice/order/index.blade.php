@@ -16,6 +16,12 @@
             margin-bottom: 8px;
         }
 
+        .select2{
+            margin-bottom: 16px;
+            width: calc(100% - 16px);
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
         input {
             width: calc(100% - 16px);
             padding: 8px;
@@ -24,7 +30,6 @@
             border-radius: 4px;
             box-sizing: border-box;
         }
-
     </style>
 @endsection
 
@@ -35,10 +40,24 @@
                 <div class="col-lg-3 col-md-12">
                     <form action="{{ route('order.index') }}" method="GET">
                         <label for="fromDate">من فترة:</label>
-                        <input type="date" id="fromDate" name="from" required>
+                        <input type="date" id="fromDate" name="from" >
 
                         <label for="toDate">الى فترة:</label>
-                        <input type="date" id="toDate" name="to" required>
+                        <input type="date" id="toDate" name="to" >
+
+                        <label for="invoiceNumber">رقم الفاتورة:</label>
+                        <input type="text" id="invoiceNumber" name="reference">
+
+                        <label for="user_id">للبائع</label>
+                        <select class="select2"  name="user_id" id="user_id"
+                            aria-label="form-select-lg example">
+                            <option value="">اختر البائع</option>
+                            @foreach ($users as $user)
+                                <option value="{{ $user->id }}">
+                                    {{ $user->name }}
+                                </option>
+                            @endforeach
+                        </select>
 
                         <label for="totalGreater">بتكلفة اكبر</label>
                         <input type="number" id="totalGreater" name="greater_price" min="0">
@@ -46,10 +65,7 @@
                         <label for="totalLess">بتكلفة اقل:</label>
                         <input type="number" id="totalLess" name="less_price" min="0">
 
-                        <label for="invoiceNumber">رقم الفاتورة:</label>
-                        <input type="text" id="invoiceNumber" name="reference">
-
-                        <button type="submit" class="btn btn-primary">Search</button>
+                        <button type="submit" class="btn btn-primary">بحـث</button>
                     </form>
                 </div>
                 <div class="col-lg-9 col-md-12">
@@ -81,32 +97,32 @@
                         <div class="row p-2 align-items-center">
                             <h5 class="mb-0 bg-light p-2 border-end col-4">اجمالى خصومات المنتجات</h5>
                             @php
-                            $discountOnProducts = 0;
-                            foreach ($orders as $order) {
-                                $discountOnProducts += $order->discountOnProducts->amount;
-                            }
-                        @endphp
-                        <h5 class="mb-0 ps-3 p-2 bg-info col-6">{{ $discountOnProducts }}</h5>
+                                $discountOnProducts = 0;
+                                foreach ($orders as $order) {
+                                    $discountOnProducts += $order->discountOnProducts->amount;
+                                }
+                            @endphp
+                            <h5 class="mb-0 ps-3 p-2 bg-info col-6">{{ $discountOnProducts }}</h5>
                         </div>
                         <div class="row p-2 align-items-center">
                             <h5 class="mb-0 bg-light p-2 border-end col-4">اجمالى خصومات الفواتير</h5>
                             @php
-                            $discountOnInvoices = 0;
-                            foreach ($orders as $order) {
-                                $discountOnInvoices += $order->discountOnInvoice->amount;
-                            }
-                        @endphp
-                        <h5 class="mb-0 ps-3 p-2 bg-info col-6">{{ $discountOnInvoices }}</h5>
+                                $discountOnInvoices = 0;
+                                foreach ($orders as $order) {
+                                    $discountOnInvoices += $order->discountOnInvoice->amount;
+                                }
+                            @endphp
+                            <h5 class="mb-0 ps-3 p-2 bg-info col-6">{{ $discountOnInvoices }}</h5>
                         </div>
                         <div class="row p-2 align-items-center">
                             <h5 class="mb-0 bg-light p-2 border-end col-4">صافى الفواتير</h5>
                             @php
-                            $invoiceNets = 0;
-                            foreach ($orders as $order) {
-                                $invoiceNets += $order->invoiceNet;
-                            }
-                        @endphp
-                        <h5 class="mb-0 ps-3 p-2 bg-info col-6">{{ $invoiceNets }}</h5>
+                                $invoiceNets = 0;
+                                foreach ($orders as $order) {
+                                    $invoiceNets += $order->invoiceNet;
+                                }
+                            @endphp
+                            <h5 class="mb-0 ps-3 p-2 bg-info col-6">{{ $invoiceNets }}</h5>
                         </div>
                     </div>
                     <table>
@@ -137,16 +153,32 @@
                         <tbody>
                             @foreach ($orders as $invoice)
                                 <tr>
-                                    <td><a href="{{ route('order.show',[$invoice->id]) }}">{{ $invoice->reference }}</a></td>
-                                    <td><a href="{{ route('order.edit',[$invoice->id]) }}">{{ $invoice->totalInvoiceWithoutDiscount }}</a></td>
-                                    <td><a href="{{ route('order.show',[$invoice->id]) }}">{{ $invoice->quantitiesNumber }}</a></td>
-                                    <td><a href="{{ route('order.show',[$invoice->id]) }}">{{ $invoice->discountOnProducts->amount }}</a></td>
-                                    <td><a href="{{ route('order.show',[$invoice->id]) }}">{{ $invoice->discountOnProducts->percent }}</a></td>
-                                    <td><a href="{{ route('order.show',[$invoice->id]) }}">{{ $invoice->discountOnInvoice->amount }}</a></td>
-                                    <td><a href="{{ route('order.show',[$invoice->id]) }}">{{ $invoice->discountOnInvoice->percent }}</a></td>
-                                    <td><a href="{{ route('order.show',[$invoice->id]) }}">{{ $invoice->invoiceNet }}</a></td>
-                                    <td><a href="{{ route('order.show',[$invoice->id]) }}">{{ $invoice->created_at }}</a></td>
-                                    <td><a href="{{ route('order.show',[$invoice->id]) }}">{{ $invoice->user->name }}</a></td>
+                                    <td><a href="{{ route('order.show', [$invoice->id]) }}">{{ $invoice->reference }}</a>
+                                    </td>
+                                    <td><a
+                                            href="{{ route('order.edit', [$invoice->id]) }}">{{ $invoice->totalInvoiceWithoutDiscount }}</a>
+                                    </td>
+                                    <td><a
+                                            href="{{ route('order.show', [$invoice->id]) }}">{{ $invoice->quantitiesNumber }}</a>
+                                    </td>
+                                    <td><a
+                                            href="{{ route('order.show', [$invoice->id]) }}">{{ $invoice->discountOnProducts->amount }}</a>
+                                    </td>
+                                    <td><a
+                                            href="{{ route('order.show', [$invoice->id]) }}">{{ $invoice->discountOnProducts->percent }}</a>
+                                    </td>
+                                    <td><a
+                                            href="{{ route('order.show', [$invoice->id]) }}">{{ $invoice->discountOnInvoice->amount }}</a>
+                                    </td>
+                                    <td><a
+                                            href="{{ route('order.show', [$invoice->id]) }}">{{ $invoice->discountOnInvoice->percent }}</a>
+                                    </td>
+                                    <td><a href="{{ route('order.show', [$invoice->id]) }}">{{ $invoice->invoiceNet }}</a>
+                                    </td>
+                                    <td><a href="{{ route('order.show', [$invoice->id]) }}">{{ $invoice->created_at }}</a>
+                                    </td>
+                                    <td><a href="{{ route('order.show', [$invoice->id]) }}">{{ $invoice->user->name }}</a>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
